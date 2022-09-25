@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-//import javax.security.auth.message.callback.PrivateKeyCallback.Request;
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 
 import util.DBUtil;
 
@@ -24,7 +24,7 @@ public class userDAO {
 		
 		try {
 			con = DBUtil.getConnection();
-			pstmt = con.prepareStatement("select * from user where user_id = ? and password = ?");
+			pstmt = con.prepareStatement("select * from user where id = ? and password = ?");
 			
 			
 			pstmt.setString(1, id);
@@ -46,7 +46,7 @@ public class userDAO {
 	}
 	
 	
-	// 모든 유저 리스트 출력
+	// 모든 유저 검색
 	public static ArrayList<User> getAllUser() throws SQLException{
 		Connection con = null; 
 		Statement stmt = null;

@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import board.BoardDTO;
-
 @WebServlet("/logincontroller")
 public class LoginController extends HttpServlet {
 	String value;
@@ -33,38 +31,19 @@ public class LoginController extends HttpServlet {
     	request.setAttribute("id", id);
     	request.setAttribute("pw", pw);
     	
-		System.out.println(id + pw);
-//		User users = new User(id, pw);
-//		boolean Login;
-//		try {
-//			Login = userDAO.getAllUser(newuser);
-//			if(Login) {
-//				request.getRequestDispatcher("login").forward(request, response);	
-//			}else {
-//				request.getRequestDispatcher("loginfail").forward(request, response);
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-		
-		
-		// 로그인 유저 아이디
-		BoardDTO userId = LoginUserId.getUserId(id);
-		
-		// 로그인 유저 아이디, 패스워드
+    	
 		User usr = LoginValidTest.loginTest(id, pw);
+		System.out.println("user :"+usr);
 		HttpSession session = request.getSession();
 		if (usr !=null) {
 			session.setAttribute("id", usr.getId());
 			session.setAttribute("pw", usr.getPassword());
 		}
-//		request.getRequestDispatcher("").forward(request, response);
 		if(usr == null) {
 			response.sendRedirect("login.html");
+			
 		} else {
 			request.getRequestDispatcher("login").forward(request, response);
-//			request.getRequestDispatcher("bookwrite.jsp").forward(request, response);
-			
 		}
 	}
 

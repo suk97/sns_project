@@ -7,19 +7,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import user.LoginController;
-import user.LoginUserId;
-import user.LoginValidTest;
 import util.DBUtil;
 
 public class BoardDAO {
-	
-	// ·Î±×ÀÎ ÇÑ À¯Àú¾ÆÀÌµð °¡Á®¿À±â
-	public static BoardDTO getUserId(String id) {
-		return getUserId(id);
-	}
-	
-	// ¸ðµç °Ô½Ã±Û ºÒ·¯¿À±â
+	// ëª¨ë“  ê²Œì‹œê¸€ ë¶ˆëŸ¬ì˜¤ê¸°
 	public static ArrayList<BoardDTO> getAllBoard() throws SQLException{
 		Connection con = null;
 		Statement stmt = null;
@@ -46,20 +37,18 @@ public class BoardDAO {
 		return allData;
 	}
 	
-	// °Ô½Ã±Û ¾²±â
+	// ê²Œì‹œê¸€ ìž‘ì„±
 	@SuppressWarnings("null")
 	public static boolean writeBoard(BoardDTO vo) throws SQLException{
 		Connection con = null;	
 		PreparedStatement pstmt = null;
 		boolean result = false;
 		
-		// ¸Þ¼Òµå·Î id °ª ºÒ·¯¿À±â
-		BoardDTO board = null;
 		
 		try {
 			con = DBUtil.getConnection();
 			pstmt = con.prepareStatement("insert into board (user_id, title, text)values (?, ?, ?)");
-			pstmt.setString(1, board.getUserId());
+			pstmt.setString(1, vo.getUserId());
 			pstmt.setString(2, vo.getTitle());
 			pstmt.setString(3, vo.getText());
 			
@@ -72,12 +61,64 @@ public class BoardDAO {
 			DBUtil.close(con, pstmt);
 		}
 		return result;
+	}	
+	
+	
+	// ê²Œì‹œê¸€ ì‚­ì œ
+	public static boolean deleteBoard(int boardId, String userId) throws SQLException{
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		boolean result = false;
+		
+		try {
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement("delete from board where board_id = ? and user_id = ?");
+			
+			pstmt.setInt(1, boardId);
+			pstmt.setString(2, userId);
+			
+			int count = pstmt.executeUpdate();
+			
+			if (count !=0) {
+				result = true;
+			}
+			
+		} finally {
+			DBUtil.close(con, pstmt);
+		}
+		return result;
+	}
+	
+	// ê²Œì‹œê¸€ ìˆ˜ì •
+	public static boolean updateBoard(int boardId, String userId, String title, String text) throws SQLException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		boolean result = false;
+		
+		try {
+			con = DBUtil.getConnection();
+			// ì¿¼ë¦¬ë¬¸ ì‹¤ìˆ˜
+			pstmt = con.prepareStatement("update board set title = ? , text = ? where board_id = ? and user_id = ? ");
+			
+			pstmt.setString(1, title);
+			pstmt.setString(2, text);
+			pstmt.setInt(3, boardId);
+			pstmt.setString(4, userId);
+			
+			int count = pstmt.executeUpdate();
+			if(count != 0) {
+				result = true;
+			}
+			
+		} finally {
+			DBUtil.close(con, pstmt);
+		} 
+		return result;
 	}
 	
 	public static void main(String[] args) {
 		try {
 			for(BoardDTO board : getAllBoard()) {
-				System.out.println(board);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

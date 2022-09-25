@@ -21,7 +21,7 @@ public class LoginSuccess extends HttpServlet {
 		String id = request.getParameter("id");
 		String pw = request.getParameter("password");
 		PrintWriter out = response.getWriter();
-		out.println("·Î±×ÀÎ ¼º°ø");
+		out.println("ë¡œê·¸ì¸ì„±ê³µ");
 	}
 
 }
